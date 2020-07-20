@@ -9,10 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-TODO: 
-Make sure I explain RLS data and caveats and how to get it
-Add some errors into the data? 
-
 
 
 
