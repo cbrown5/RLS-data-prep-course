@@ -10,8 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
-
 # Cleaning ecological survey data for conservation scientists
 
 ## Setup for the course  
@@ -37,13 +35,34 @@ Uses RLS data (link to papers )
 
 Case-study description and narrative 
 
+## Why R and RStudio for data analysis?
+
+Reproducibility
+Flexibility
+Collaboration
+more...?
+
+Nice features of rstudio - script, console, environment, files plots, help, etc.
+
+Few basics (maybe too basic for this course?)
+Functions, arguments, asking for help, e.g. ?function
+Google is your friend! stack exchange etc.
+
 ## The importance of being organized
 
 Explain how best to organize folders/projects 
 
+R projects
+Folders - data/scripts/outputs
+Folders 'talk' to each other - pathfile names
+Always keep raw data - modify/wrangle in script
+
 ## New script
 
 Name it, date it etc... 
+Naming convention r scripts - i.e. Jenny Bryan's awesome file names
+Different script for each data exploration/analysis 'chunk'
+E.g. 'wrangle-script.R', 'plot.R', 'model.R',....
 
 ```{r}
 
@@ -66,17 +85,30 @@ dat <- read_csv("data/Rottnest-Island-UVC.csv")
 
 Why we use readr
 
-
 ## Explore the data
 
+Importance of data type: numeric, factor, character, logical, etc...
 ```{r}
+str(dat)
 names(dat)
 nrow(dat)
+head(dat)
+tail(dat)
 length(unique(dat$SurveyID))
 length(unique(dat$SpeciesID))
 unique(dat$Sizeclass)
 table(dat$Method)
 ```
+
+## Data wrangling
+
+```{r}
+library(dplyr)
+```
+
+Overview of dplyr and utility for data wrangling
+Pipe operator %>%?
+select function might be a nice one to show too, alongside filter
 
 ## Filtering
 
@@ -99,7 +131,8 @@ ggplot(datscarus) +
 ```
 
 Explain theory of ggplot2
-
+Grammar of graphics
+Layering
 
 ```{r}
 ggplot(datscarus) + 
@@ -114,6 +147,8 @@ ggplot(datscarus) +
   geom_point()
 ```
 
+## If have time could go into color palettes here?
+
 ## Joining
 ```{r}
 survdat <- read_csv("data/Rottnest-Island-surveys.csv")
@@ -121,6 +156,10 @@ datscarus2 <- left_join(datscarus, survdat, by = "SurveyID")
 ```
 
 Explain how to avoid bugs in joins
+How data 'gains' happen - left joins and duplicating rows
+How data 'losses' happen - incorrect names, etc...
+Watch number of observations in global environment
+Check number of unique observations for any loss/gain of data in joins
 
 ```{r}
 nrow(datscarus)
@@ -222,7 +261,7 @@ ggplot(dat6) +
   geom_line()
 ```
 
-
+## Can we throw some errors into the data to highlight common problems with joins, data types, etc... as going through examples above?
 
 ## Conclusion
 
