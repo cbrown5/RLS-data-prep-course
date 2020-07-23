@@ -9,73 +9,94 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#TODO: 
+Create conshack url so it links!
+Add an image at top
+
 
 # Cleaning ecological survey data for conservation scientists
 
-## Setup for the course  
+The most time-consuming step in many analyses is the cleaning and preparation of the data. This course will show you how you can use R to speed up that process and make it more transparent and repeatable. This means it will also be easier to check for and correct errors in your data processing. 
+
+This course is part of a new initiative [Conservation Hackers](www.conservationhackers.org). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
+
+We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
+
+The course should take about 3 hours to complete. We'll focus on a particular set of packages for data analysis from the 'tidyverse'. We'll cover filtering, error checking, joinging data frames and some simple plots. The course aims to to explain some key concepts in detail so that students have the confidence to learn more. 
+
+## Setup for this course  
 
 So that the course runs efficiently, and to save plenty of time for trying fun things in R, we'd ask that you come to the course prepared. 
+
 This is an intermediate level course, so we'll assume you know how to install R and R packages. As a general guide to what we expect in terms of prior knowledge, we'll assume you can run R, load data and write basic calculations that you save in a script. We'll assume you know nothing about how to structure data, create plots or make data summaries. Even if you know about these topics, you may still find the course helpful if you are self-taught, because we'll cover the conceptual foundation of these topics. 
 
 Please have R and Rstudio installed on your computer before starting. You'll want to save plenty of time for doing this, it can be tricky on some computers, especially if you do not have 'admin' permission on a work computer. You may need to call IT to get help. We obviously only offer limited help with such installation issues. 
 The latest version of R is version 4. You are welcome to try this version. We are using 3.6.2 currently for writing this course, so there may be some minor differences. The reason we haven't updated yet is that a lot of the packages we use haven't been updated yet. 
 
 You'll also need to install a few R packages. We're using `dplyr`, `readr`, `lubridate`, `ggplot2` and `tidyr` in this course. You can install them with this R code: 
-`install.packages(c("dplyr", "readr", "lubridate", "ggplot2"))`
+`install.packages(c("dplyr", "readr", "lubridate", "ggplot2"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
+
 If that doesn't work email us with the error and we'll try to help. Otherwise, see your IT department for help. 
 We're using dplyr version 1.0, which was released earlier this year. If you have an older version of dplyr the course should still work fine, but there may be some minor differences in the code. 
 
-## Overview
+## Data and the case-study
 
-3 hour intro to data wrangling with tidyverse tools. 
-Covers data joins, filtering, summarizing and simple plots
-Aim to explain key concepts in detal, not a comprehensive overview
+We will use data from Reef Life Survey's Rottnest Island surveys (accessible [here]()). Rottnest Island is in Western Australia and its reefs host a diverse fish assemblage. This includes both temperate and tropical species. In 2011 a heatwave caused the fish community to undergo a massive change. We'll base our analysis today on a study by [Day and colleagues](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12753), which showed an increase in tropical fish during and after the heatwave. 
 
-Uses RLS data (link to papers )
+## Overview of R in RStudio
 
-Case-study description and narrative 
+We'll assume you are using R in Rstudio. Rstudio is an integrated developmement environment or IDE in hacker speak. The Rstudio IDE is an interface to R that adds many human friendly features. There are a few terms we'll assume you are familiar with in this course. First Rstudio's window panes: 
 
-## Why R and RStudio for data analysis?
+- Console: where the code is evaluated (computing) by the R program. 
+- Script: Where you write your code so you can save it for later
+- Environment: Basically the data in R's memory
+- Object: An object in R's memory
+- Class: Object's have different types, which means they interact with you and functions in different ways
+- data frame: a class of R object commonly used for storing data, it has an equal number of rows,  column names and columns can vary in the class of data they store (e.g. dates, words, numbers). 
 
-Reproducibility
-Flexibility
-Collaboration
-more...?
+Some other important terms you should know: 
 
-Nice features of rstudio - script, console, environment, files plots, help, etc.
+- R Package: a collection of code tools that we can import to add functionality to the base R language. Packages are stored in 'libraries' hence we read packages in with the `library()` command. 
+- Function: a programming tool that has been preprepared for use in R. 
+- Arguments: The parameters that a function uses to decide what to do. 
+- .... other things
 
-Few basics (maybe too basic for this course?)
-Functions, arguments, asking for help, e.g. ?function
-Google is your friend! stack exchange etc.
 
 ## The importance of being organized
 
-Explain how best to organize folders/projects 
+So now you know Rstudio and have downloaded the data, let's talk about being organized. Organization is key, because even simple data analyses can produce a lot of complex code and many intermediate data outputs. 
 
-R projects
-Folders - data/scripts/outputs
-Folders 'talk' to each other - pathfile names
-Always keep raw data - modify/wrangle in script
+We recommend you create a folder on your computer for each new project, like today's course. You can do this as an Rstudio project if you like (see File > New project) or just as a folder. Within that create a data-raw folder where you will keep your raw data. If datafiles are really big, then you might also have a folder somewhere else (e.g. on the drive) that you link to later. You can store intermediate data-steps in data-raw or another folder, its up to you. Also make a folder for your R code and a folder to save your figures in. 
+
+We also recommend giving your files human and machine readable names. [Jenny Brian's](https://speakerdeck.com/jennybc/how-to-name-files) advice is a good to look at for ways to name your files. 
 
 ## New script
 
-Name it, date it etc... 
-Naming convention r scripts - i.e. Jenny Bryan's awesome file names
-Different script for each data exploration/analysis 'chunk'
-E.g. 'wrangle-script.R', 'plot.R', 'model.R',....
+Now create a new script (file > New File > R Script) and save it with a sensible name in your project folder. 
+Leave yourself some 'breadcrumbs' at the top of the script. It's common that you'll look at some R code after a long break and forget what you were doing. So start our scripts like this, with a title, name of creator, date and perhaps description: 
+
 
 ```{r}
-
+# RLS data wrangling course
+# CJ Brown 
+#2020-07-23
 ```
 
-## Libraries 
+The `#` symbol is a 'comment' that tells R to ignore this text. 
 
-What's a library/package? 
+Now if your analysis gets complex you should split it among different scripts. We'll just use the one today, but if you have a more complex project its a good idea to chunk it. Then you might like to name you scripts '1_data-error-checking.R`, '2_exploratory-plots.R' etc..., so you know what order to run them in. 
+
+## Packages  
+
+Now we are organized, let's load a package into this session: 
 
 ```{r}
 library(readr)
 ```
 
+Much of R's power comes from all the user-contributed packages, which do a huge variety of different tasks. Many of these packages live in [CRAN](https://cran.r-project.org/) where they undergo some verification. There are many more on github and other repositories, these don't undergo the same level of checking. R's license requires that the user knows what they are doing (there is no warranty!), so its on you to read and understand what a package does. 
+
+Today we'll use `readr` to read in data and then see some other packages for data wrangling and plotting. 
 
 ## Read in data
 
@@ -83,9 +104,13 @@ library(readr)
 dat <- read_csv("data/Rottnest-Island-UVC.csv")
 ```
 
-Why we use readr
+There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
 
 ## Explore the data
+
+For any new data you should always explore it. 
+
+UP TO HERE IWTH WRITING
 
 Importance of data type: numeric, factor, character, logical, etc...
 ```{r}
@@ -262,6 +287,10 @@ ggplot(dat6) +
 ```
 
 ## Can we throw some errors into the data to highlight common problems with joins, data types, etc... as going through examples above?
+
+## Getting help 
+
+Google is your friend! stack exchange etc.
 
 ## Conclusion
 
