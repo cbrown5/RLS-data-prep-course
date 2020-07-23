@@ -101,7 +101,7 @@ Today we'll use `readr` to read in data and then see some other packages for dat
 ## Read in data
 
 ```{r}
-dat <- read_csv("data/Rottnest-Island-UVC.csv")
+dat <- read_csv("data-raw/Rottnest-Island-UVC.csv")
 ```
 
 There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
@@ -176,7 +176,7 @@ ggplot(datscarus) +
 
 ## Joining
 ```{r}
-survdat <- read_csv("data/Rottnest-Island-surveys.csv")
+survdat <- read_csv("data-raw/Rottnest-Island-surveys.csv")
 datscarus2 <- left_join(datscarus, survdat, by = "SurveyID")
 ```
 
@@ -212,7 +212,7 @@ Try turning off hte points,  you can see the trend better
 ## Join sites
 
 ```{r}
-sdat <- read_csv("data/Rottnest-Island-sites.csv")
+sdat <- read_csv("data-raw/Rottnest-Island-sites.csv")
 dat2 <- left_join(dat, survdat, by = "SurveyID")
 nrow(dat)
 length(unique(dat$SurveyID))
