@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #TODO: 
+Recreate csv files with one duplicate siteid and one NA in the abundances
 Create conshack url so it links!
 Add an image at top
 
@@ -106,7 +107,7 @@ dat <- read_csv("data-raw/Rottnest-Island-UVC.csv")
 
 There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
 
-## Explore the data
+## Explore the data - CAB
 
 For any new data you should always explore it. 
 
@@ -125,7 +126,7 @@ unique(dat$Sizeclass)
 table(dat$Method)
 ```
 
-## Data wrangling
+## Data wrangling - CAB
 
 ```{r}
 library(dplyr)
@@ -143,7 +144,7 @@ Let's start by exploring data for one species, *Scarus ghobban*.
 datscarus <- filter(dat, CURRENT_TAXONOMIC_NAME == "Scarus ghobban")
 ```
 
-## First plots 
+## First plots - CJB
 
 ```{r}
 library(ggplot2)
@@ -174,7 +175,7 @@ ggplot(datscarus) +
 
 ## If have time could go into color palettes here?
 
-## Joining
+## Joining - CJB
 ```{r}
 survdat <- read_csv("data-raw/Rottnest-Island-surveys.csv")
 datscarus2 <- left_join(datscarus, survdat, by = "SurveyID")
@@ -190,6 +191,9 @@ Check number of unique observations for any loss/gain of data in joins
 nrow(datscarus)
 nrow(datscarus2)
 ```
+
+Dates are hard, one helpful package is lubridate.
+
 ```{r}
 library(lubridate)
 datscarus2$year <- year(datscarus2$SurveyDate)
@@ -209,7 +213,10 @@ ggplot(datscarus2) +
 ```
 Try turning off hte points,  you can see the trend better
 
-## Join sites
+## Join sites - CJB
+
+- Add an error here. 
+
 
 ```{r}
 sdat <- read_csv("data-raw/Rottnest-Island-sites.csv")
@@ -224,15 +231,17 @@ length(unique(dat2$SurveyID))
 ```
 
 
-##Summarizing 
+##Summarizing - CAB
 
 ```{r}
 dat2$year <- year(dat2$SurveyDate)
 dat2g <- group_by(dat2, SurveyID)
 datA <- summarize(dat2g, 
-                  sum_abund = sum(Abundance, na.rm = TRUE))
+                  sum_abund = sum(Abundance))
 
 ```
+
+Now redo with `na.rm = TRUE`
 
 ```{r}
 ggplot(datA) + 
@@ -254,7 +263,7 @@ ggplot(dat4) +
   stat_smooth()
 ```
 
-## Creating new variables
+## Creating new variables - CAB
 
 ```{r}
 library(tidyr)
@@ -264,6 +273,8 @@ dat5 <- pivot_wider(dat4, names_from = TempTrop_23cutoff,
 dat5 <- mutate(dat5, prop_trop = tropical/(temperate + tropical))
 
 ```
+Opposite of `pivot_wider` is `pivot_longer`. 
+
 
 ```{r}
 ggplot(dat5) + 
@@ -288,10 +299,18 @@ ggplot(dat6) +
 
 ## Can we throw some errors into the data to highlight common problems with joins, data types, etc... as going through examples above?
 
-## Getting help 
+## Getting help - Both of us. 
 
 Google is your friend! stack exchange etc.
 
 ## Conclusion
 
 Table of other tidyverse tools you might wnat to check out
+
+### Pipes 
+
+### Lubridate 
+
+### Dealing with strings 
+
+
