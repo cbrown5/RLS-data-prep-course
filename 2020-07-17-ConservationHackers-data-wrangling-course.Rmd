@@ -23,7 +23,7 @@ This course is part of a new initiative [Conservation Hackers](www.conservationh
 
 We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
 
-The course should take about 3 hours to complete. We'll focus on a particular set of packages for data analysis from the 'tidyverse'. We'll cover filtering, error checking, joinging data frames and some simple plots. The course aims to to explain some key concepts in detail so that students have the confidence to learn more. 
+The course should take about 3 hours to complete. We'll focus on a particular set of packages for data analysis from the 'tidyverse'. We'll cover filtering, error checking, joining data frames and some simple plots. The course aims to to explain some key concepts in detail so that students have the confidence to learn more. 
 
 ## Setup for this course  
 
@@ -53,21 +53,28 @@ We'll assume you are using R in Rstudio. Rstudio is an integrated developmement 
 - Environment: Basically the data in R's memory
 - Object: An object in R's memory
 - Class: Object's have different types, which means they interact with you and functions in different ways
-- data frame: a class of R object commonly used for storing data, it has an equal number of rows,  column names and columns can vary in the class of data they store (e.g. dates, words, numbers). 
+- data frame: a class of R object commonly used for storing data, it has an equal number of rows, column names and columns can vary in the class of data they store (e.g. dates, words, numbers). 
 
 Some other important terms you should know: 
 
 - R Package: a collection of code tools that we can import to add functionality to the base R language. Packages are stored in 'libraries' hence we read packages in with the `library()` command. 
 - Function: a programming tool that has been preprepared for use in R. 
 - Arguments: The parameters that a function uses to decide what to do. 
-- .... other things
 
+To find out what a function does and the arguments it uses, use the help() function, or ?.
+
+```{r}
+help(library)
+?library
+```
+
+If you're having trouble using functions with your own data, the 'Examples' section in the help documentation can be a good place to start.
 
 ## The importance of being organized
 
 So now you know Rstudio and have downloaded the data, let's talk about being organized. Organization is key, because even simple data analyses can produce a lot of complex code and many intermediate data outputs. 
 
-We recommend you create a folder on your computer for each new project, like today's course. You can do this as an Rstudio project if you like (see File > New project) or just as a folder. Within that create a data-raw folder where you will keep your raw data. If datafiles are really big, then you might also have a folder somewhere else (e.g. on the drive) that you link to later. You can store intermediate data-steps in data-raw or another folder, its up to you. Also make a folder for your R code and a folder to save your figures in. 
+We recommend you create a folder on your computer for each new project, like today's course. You can do this as an Rstudio project if you like (see File > New project) or just as a folder. Within that create a data-raw folder where you will keep your raw data. If datafiles are really big, then you might also have a folder somewhere else (e.g. on the drive) that you link to later. You can store intermediate data-steps in data-raw or another folder, it's up to you. Also make a folder for your R code and a folder to save your figures in. 
 
 We also recommend giving your files human and machine readable names. [Jenny Brian's](https://speakerdeck.com/jennybc/how-to-name-files) advice is a good to look at for ways to name your files. 
 
@@ -85,7 +92,7 @@ Leave yourself some 'breadcrumbs' at the top of the script. It's common that you
 
 The `#` symbol is a 'comment' that tells R to ignore this text. 
 
-Now if your analysis gets complex you should split it among different scripts. We'll just use the one today, but if you have a more complex project its a good idea to chunk it. Then you might like to name you scripts '1_data-error-checking.R`, '2_exploratory-plots.R' etc..., so you know what order to run them in. 
+Now if your analysis gets complex you should split it among different scripts. We'll just use the one today, but if you have a more complex project it's a good idea to chunk it. Then you might like to name you scripts '1_data-error-checking.R`, '2_exploratory-plots.R' etc..., so you know what order to run them in. 
 
 ## Packages  
 
@@ -95,7 +102,7 @@ Now we are organized, let's load a package into this session:
 library(readr)
 ```
 
-Much of R's power comes from all the user-contributed packages, which do a huge variety of different tasks. Many of these packages live in [CRAN](https://cran.r-project.org/) where they undergo some verification. There are many more on github and other repositories, these don't undergo the same level of checking. R's license requires that the user knows what they are doing (there is no warranty!), so its on you to read and understand what a package does. 
+Much of R's power comes from all the user-contributed packages, which do a huge variety of different tasks. Many of these packages live in [CRAN](https://cran.r-project.org/) where they undergo some verification. There are many more on github and other repositories, these don't undergo the same level of checking. R's license requires that the user knows what they are doing (there is no warranty!), so it's on you to read and understand what a package does. 
 
 Today we'll use `readr` to read in data and then see some other packages for data wrangling and plotting. 
 
@@ -107,41 +114,79 @@ dat <- read_csv("data-raw/Rottnest-Island-UVC.csv")
 
 There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
 
-## Explore the data - CAB
+We've read in our data as a data frame; check your global environment and you should see is listed as an object in memory called 'dat' with the number of observations and variables listed.
 
-For any new data you should always explore it. 
+## Checking the data - CAB
+**suggest calling 'checking' rather than exploring here, becuase exploring should include most of the steps after too, including plots etc.
 
-UP TO HERE IWTH WRITING
+For any new data you should always check and then explore it. The rest of the course will demonstrate data wrangling for exploration.
 
-Importance of data type: numeric, factor, character, logical, etc...
+If you haven't collected the data yourself, it is a good idea to contact the data provider to ensure that you understand how the data was collected and that you make appropriate acknowledgments. An in-depth understanding of how the data was collected will help you to make good decisions when analysing the data.
+
+Once you're ready to dive into some data exploration, the first step is to take a look at it. There are a few key functions in R that let us look at the data in different ways. These functions are likely to become standard routine in your scripts. They will help you determine if your data is formatted correctly for further wrangling and analysis.
+
+First we'll check the data type of each of the variables in our data frame.
+
+The data types/classes we'll discuss in this course are:
+
+- character
+- numeric (double)
+- integer
+- factor
+- dates and times
+
 ```{r}
-str(dat)
-names(dat)
-nrow(dat)
 head(dat)
 tail(dat)
+View(dat)
+names(dat)
+nrow(dat)
+ncol(dat)
 length(unique(dat$SurveyID))
 length(unique(dat$SpeciesID))
 unique(dat$Sizeclass)
-table(dat$Method)
+table(dat$Sizeclass)
+summary(dat)
 ```
 
-## Data wrangling - CAB
+We can change data types easily using the 'as...' group of functions. For example, let's say we wanted to turn the 'Sizeclass' variable into ordered categories that we could group the rest of the data by. This might be useful if we want to plot abundance in each size class from smallest to largest.
+
+```{r}
+dat$Sizeclass <- as.factor(dat$Sizeclass)
+head(dat)
+levels(dat$Sizeclass)
+dat$Sizeclass <- as.numeric(dat$Sizeclass)
+head(dat)
+```
+
+## Data wrangling
+
+Wrangling your data means getting into shape for visualisation and analysis. The 'dplyr' package provides an array of useful functions for wrangling.
 
 ```{r}
 library(dplyr)
 ```
 
-Overview of dplyr and utility for data wrangling
-Pipe operator %>%?
-select function might be a nice one to show too, alongside filter
+The conceptual framework under-pinning dplyr is called the "Grammar of data manipulation'. We'll start with two key functions here, and we'll continue to reveal more as the course progresses. As bonus material at the end of the course we'll show a special tool that allows us to string dplyr functions together for efficient and elegant data wrangling.
 
-## Filtering
+## Filtering and selecting
 
 Let's start by exploring data for one species, *Scarus ghobban*. 
 
 ```{r}
 datscarus <- filter(dat, CURRENT_TAXONOMIC_NAME == "Scarus ghobban")
+head(datscarus)
+length(unique(datscarus$SpeciesID))
+```
+
+We might also want to remove some columns in our data set. We can do this easily with dplyr's select function. For example, we know that all the data was collected with the same method, so we'll remove this column.
+
+```{r}
+unique(dat$Method)
+datsub <- select(dat, -Method)
+head(datsub)
+datsub2 <- select(dat, SurveyID:Sizeclass, Abundance:TempTrop_23cutoff)
+head(datsub2)
 ```
 
 ## First plots - CJB
@@ -231,17 +276,23 @@ length(unique(dat2$SurveyID))
 ```
 
 
-##Summarizing - CAB
+## Summarizing
+
+Summarising data can help us visualise and quantify patterns in the data.
+
+First, we want to know the distribution of total fish abundance across surveys. We can use the 'lubridate' package to extract the year of each survey, and the 'dplyr' package to group the data by SurveyID. Then we can calculate the total abundance of fish in each survey and plot it.
 
 ```{r}
 dat2$year <- year(dat2$SurveyDate)
 dat2g <- group_by(dat2, SurveyID)
 datA <- summarize(dat2g, 
                   sum_abund = sum(Abundance))
-
+head(datA)
 ```
 
 Now redo with `na.rm = TRUE`
+
+We can plot the distribution of total abundance in each each survey as a histogram.
 
 ```{r}
 ggplot(datA) + 
@@ -249,12 +300,14 @@ ggplot(datA) +
   geom_histogram()
 ```
 
+We also want to know whether temperate or tropical fish species have higher total abundance at each site in different years. We'll use dplyr to filter the data and get rid of any species that haven't been classified as temperate or tropical. Then we'll group the data by survey, site, year, and temperate/tropical.
+
 ```{r}
 dat3 <- filter(dat2, !is.na(TempTrop_23cutoff))
 dat3g <- group_by(dat3, SurveyID, SiteCode, year, TempTrop_23cutoff)
 dat4 <- summarize(dat3g, 
                   sum_abund = sum(Abundance, na.rm = TRUE))
-
+head(dat4)
 ```
 ```{r}
 ggplot(dat4) + 
@@ -263,18 +316,37 @@ ggplot(dat4) +
   stat_smooth()
 ```
 
-## Creating new variables - CAB
+## Creating new variables
+
+Sometimes we need to calculate a new variable from other variables in our data frame. We want to know if the proportion of tropical species differs among sites and across years.
+
+It sounds pretty straight-forward, but actually requires a few new data wrangling skills. We'll introduce a new package to help us, 'tidyr'. 
+
+First, we need to pivot our data from long format to wide format. Typically, best practice is to enter your data in long format, i.e. each observation has its own row, and each column is a variable. This is how our RLS data is formatted. 
+
+Wide format means that columns can refer to different types of observations. In this case, we want to make make observations of Temperate and Tropical fish species abundances their own columns. This will make it easier to calculate the proportion of tropical species in each site and survey.
 
 ```{r}
 library(tidyr)
 dat5 <- pivot_wider(dat4, names_from = TempTrop_23cutoff,
                     values_from = sum_abund,
                     values_fill = list(sum_abund = 0))
+head(dat5)
 dat5 <- mutate(dat5, prop_trop = tropical/(temperate + tropical))
-
 ```
-Opposite of `pivot_wider` is `pivot_longer`. 
 
+And just as a quick exercise to solidify our understanding of wide vs. long format, we'll run the reverse of 'pivot_wider', 'pivot_longer'.
+
+```{r}
+dat6 <- pivot_longer(dat5, temperate:tropical, 
+                     names_to = 'TempTrop_23cutoff',
+                     values_to = 'sum_abund')
+head(dat6)
+```
+
+Pretty easy, hey?
+
+Now we'll use our wide format data to plot the proportion of tropical species at each site, in each year.
 
 ```{r}
 ggplot(dat5) + 
@@ -283,31 +355,51 @@ ggplot(dat5) +
   stat_smooth()
 ```
 
-
-##
+To remove of the noise in our data, we'll group the data by site and year and then calculate the mean proportion of tropical species.
 
 ```{r}
-dat6g <- group_by(dat5, SiteCode, year)
-dat6 <- summarize(dat6g, prop_trop = mean(prop_trop))
+dat5g <- group_by(dat5, SiteCode, year)
+dat5 <- summarize(dat5g, prop_trop = mean(prop_trop))
 ```
 
 ```{r}
-ggplot(dat6) + 
+ggplot(dat5) + 
   aes(x = year, y = prop_trop, color = SiteCode) +
   geom_line()
 ```
 
-## Can we throw some errors into the data to highlight common problems with joins, data types, etc... as going through examples above?
-
 ## Getting help - Both of us. 
 
-Google is your friend! stack exchange etc.
+Error messages can happen frequently in R, especially when you're trying new techniques/analyses, and can be frustrating. First, read the error message and try to find meaning in it. This can be difficult and seem somwhat futile if you're new to R programming but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
+
+However, in the meantime, if you can't solve an error message, google is your friend. Try copying and pasting the error message into google search engine, along with 'R' and the name of the function you're trying to use. If other people have encountered similar error messages, you will likely be directed to a stack-exchange forum with potential solutions to the problem. 
+
+RStudio also provides 'cheatsheets' which can be highly valuable when starting out with some of the packages we have introduced today (https://rstudio.com/resources/cheatsheets/).
+
+Also, if you use twitter, following #rstats is a nice way to keep up-to-date with the latest developments in R. You can also tweet your own questions/errors with the #rstats to get help.
 
 ## Conclusion
 
 Table of other tidyverse tools you might wnat to check out
 
 ### Pipes 
+
+Pipes are a tool that allow us to elegantly code data wrangling steps into a series of sequential actions on a single data frame. When used properly, pipes allow us to implement the same wrangling steps with less code.
+
+In this course we've used how to use quite a few dplyr functions for data wrangling, including: 'filter', 'group_by', 'summarise', and 'mutate'. So far we've coded each of those functions as separate steps. Let's look at how pipes can be used to code all of those sequentially in a single line of code.
+
+We want to know the total abundance of fish species greater than 12 cm at each of our sites in the year 2011.
+
+```{r}
+dat7 <- dat2 %>% mutate(SurveyYear = year(SurveyDate)) %>% 
+  filter(SurveyYear == 2011 & Sizeclass > 12) %>% 
+  group_by(SiteCode, SpeciesID, CURRENT_TAXONOMIC_NAME) %>% 
+  summarize(sum_abund = sum(Abundance))
+
+ggplot(dat7) + 
+  aes(x = SiteCode, y = sum_abund, color = CURRENT_TAXONOMIC_NAME) +
+  geom_bar(stat = 'identity')
+```  
 
 ### Lubridate 
 
