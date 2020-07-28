@@ -1,7 +1,7 @@
 ---
 title: "Cleaning ecological survey data for conservation scientists"
 author: "CJ Brown, C Buelow"
-date: "28 July 2020"
+date: "29 July 2020"
 output: html_document
 ---
 
@@ -18,6 +18,8 @@ This course is part of a new initiative Conservation Hackers (webpage forthcomin
 We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
 
 The course should take about 3 hours to complete. We'll focus on a particular set of packages for data analysis from the 'tidyverse'. We'll cover filtering, error checking, joining data frames and some simple plots. The course aims to to explain some key concepts in detail so that students have the confidence to learn more. 
+
+![](images/Scarus-ghobban.jpg)
 
 ## Setup for this course  
 
@@ -63,7 +65,7 @@ To find out what a function does and the arguments it uses, use the help() funct
 
 ```{r}
 help(library)
-?library
+#?library
 ```
 
 If you're having trouble using functions with your own data, the 'Examples' section in the help documentation can be a good place to start.
@@ -130,7 +132,7 @@ The data types we'll discuss in this course are:
 - factor
 - dates and times
 
-```{r}
+```{r eval = FALSE}
 head(dat)
 tail(dat)
 #View(dat) #also try hover over the name and press F2
@@ -253,14 +255,14 @@ nrow(survdat)
 length(unique(survdat$SurveyID))
 ```
 
-Hmm, one duplicate survey ID. Does the new datscarus have duplicate data? 
+Hmm, one duplicate survey ID. Does the new `datscarus` have duplicate data? 
 
 ```{r}
 nrow(datscarus)
 nrow(datscarus2)
 ```
 
-It doesn't that duplicate survey ID must have no *Scarus ghobban*. We'll return to this point later. 
+It has the same number of rows both before and after the join, so no data has been duplicated. This suggests the duplicated SurveyID in `survdat` has no *Scarus ghobban*. We'll return to this point later. 
 
 Now let's plot abundance by years. To get the year from the survey date we'll use the `lubridate` package. Dates are hard to work with (think timezones, leap years etc....), and we won't cover this topic today. If you get stuck working with dates, lubridate is a good helper to look into.  
 
