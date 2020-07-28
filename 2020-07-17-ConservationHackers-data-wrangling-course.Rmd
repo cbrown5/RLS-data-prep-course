@@ -36,7 +36,11 @@ We're using dplyr version 1.0, which was released earlier this year. If you have
 
 ## Data and the case-study
 
-We will use data from Reef Life Survey's Rottnest Island surveys (accessible [here]()). Rottnest Island is in Western Australia and its reefs host a diverse fish assemblage. This includes both temperate and tropical species. In 2011 a heatwave caused the fish community to undergo a massive change. We'll base our analysis today on a study by [Day and colleagues](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12753), which showed an increase in tropical fish during and after the heatwave. 
+We will use data from Reef Life Survey's Rottnest Island surveys (accessible [here](https://reeflifesurvey.com/survey-data/)). Rottnest Island is in Western Australia and its reefs host a diverse fish assemblage. This includes both temperate and tropical species. In 2011 a heatwave caused the fish community to undergo a massive change. We'll base our analysis today on a study by [Day and colleagues](https://onlinelibrary.wiley.com/doi/full/10.1111/ddi.12753), which showed an increase in tropical fish during and after the heatwave. 
+
+We'll aim to organize this data so we can study the effects of the heatwave on temperate and tropical species composition. 
+
+We've modified the data slightly so it contains some errors to practice with, so if you want to use this data for real science, please contact Reef Life Survey directly. 
 
 ## Overview of R in RStudio
 

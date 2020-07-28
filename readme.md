@@ -1,9 +1,8 @@
 #Readme
 
-TODO:
-Make sure I explain RLS data and caveats and how to get it
-Add some errors into the data?
+Chris Brown, Christina Buelow
 
+28th July 2020
 
 ## Setup
 
