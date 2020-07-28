@@ -114,18 +114,15 @@ There is also the similar `read.csv()` in base R. We like to use readr's `read_c
 
 We've read in our data as a data frame; check your global environment and you should see is listed as an object in memory called 'dat' with the number of observations and variables listed.
 
-## Checking the data - CAB
-**suggest calling 'checking' rather than exploring here, becuase exploring should include most of the steps after too, including plots etc.
+## Check the data
 
-For any new data you should always check and then explore it. The rest of the course will demonstrate data wrangling for exploration.
+Note that, if you haven't collected the data yourself, it is a good idea to contact the data provider to ensure that you understand how the data was collected and that you make appropriate acknowledgments. An in-depth understanding of how the data was collected will help you to make good decisions when analysing the data.
 
-If you haven't collected the data yourself, it is a good idea to contact the data provider to ensure that you understand how the data was collected and that you make appropriate acknowledgments. An in-depth understanding of how the data was collected will help you to make good decisions when analysing the data.
-
-Once you're ready to dive into some data exploration, the first step is to take a look at it. There are a few key functions in R that let us look at the data in different ways. These functions are likely to become standard routine in your scripts. They will help you determine if your data is formatted correctly for further wrangling and analysis.
+Once you're ready to start working with the data, you'll want to do some initial checks. There are a few key functions in R that let us look at the data in different ways. These functions are likely to become standard routine in your scripts. They will help you determine if your data is formatted correctly for further wrangling and analysis.
 
 First we'll check the data type of each of the variables in our data frame.
 
-The data types/classes we'll discuss in this course are:
+The data types we'll discuss in this course are:
 
 - character
 - numeric (double)
@@ -147,21 +144,25 @@ table(dat$Sizeclass)
 summary(dat)
 ```
 
-We can change data types easily using the 'as...' group of functions. For example, let's say we wanted to turn the 'Sizeclass' variable into ordered categories that we could group the rest of the data by. This might be useful if we want to plot abundance in each size class from smallest to largest.
+We can change data types easily using a group of functions that start with 'as.'. For example, let's say we wanted to turn the 'Sizeclass' variable into ordered categories that we could group the rest of the data by. This might be useful if we want to plot abundance in each size class from smallest to largest.
 
 ```{r}
 dat$Sizeclass <- as.factor(dat$Sizeclass)
 head(dat)
 levels(dat$Sizeclass)
-dat$Sizeclass <- as.numeric(dat$Sizeclass)
-head(dat)
 ```
 
 Watch out though! If you change a factor to a numeric you'll get numbers 1:number of factor levels, even if the factor names are different numbers. 
 
+```{r}
+dat$Sizeclass <- as.numeric(dat$Sizeclass)
+head(dat)
+unique(dat$Sizeclass)
+```
+
 ## Data wrangling
 
-Wrangling your data means getting into shape for visualisation and analysis. The 'dplyr' package provides an array of useful functions for wrangling.
+Wrangling your data means getting into shape for exploration and analysis. The 'dplyr' package provides an array of useful functions for wrangling.
 
 ```{r}
 library(dplyr)
@@ -231,11 +232,11 @@ ggplot(datscarus) +
 
 You can change everything in ggplot graphics. We won't cover them in detail today, but some other things to investigate are colours (e.g. the `scale_color...()` functions), facets to create multiple panels, different types of geoms and themes. 
 
-Note there are no observations of zero *S. ghobban*, why is this, did they occur on ever survey? 
+Note there are no observations of zero *S. ghobban*, why is this, did they occur on every survey? 
 
 ## Joining
 
-Now let's tackle some data wrangling. A core skill is joining dataframes. This comes in handy for working with relational databases, such as the RLS data. In this data we have the fish counts, which have survey IDs. Each survey also has attributes (likes dates) attached to it. These are in a separate database. Let's read that in and join it here: 
+Now let's tackle some data wrangling. A core skill is joining dataframes. This comes in handy for working with relational databases, such as the RLS data. In this data we have the fish counts, which have survey IDs. Each survey also has attributes (like dates) attached to it. These are in a separate database. Let's read that in and join it here: 
 
 ```{r}
 survdat <- read_csv("data-raw/Rottnest-Island-surveys.csv")
@@ -288,7 +289,7 @@ But there is a statistical 'error' in this smooth line, do you know what it is?
 
 ## Dealing with errors in joins 
 
-Now let's go back to the full dataframe. We'll join the survey level data and then the site level data
+Now let's go back to the full dataframe. We'll join the survey level data and then the site level data.
 
 ```{r}
 dat2 <- left_join(dat, survdat, by = "SurveyID")
@@ -367,7 +368,7 @@ Which removes the NAs. However, its worth trying the first one first, because we
 
 Now what if we want to sum abundances by Survey IDs? 
 
-Well the dplyr way to sum is like this: 
+Well the dplyr way is to sum is like this: 
 
 ```{r}
 summarize(dat3, sum(Abundance, na.rm = TRUE))
@@ -383,7 +384,7 @@ datA <- summarize(dat3g,
 head(datA)
 ```
 
-We can now plot the distribution of total abundance in each each survey as a histogram.
+We can now plot the distribution of total abundance in each survey as a histogram.
 
 ```{r}
 ggplot(datA) + 
@@ -425,15 +426,19 @@ The key to the facet working well was that the temp-trop label was a column of i
 
 ## Creating new variables
 
-Sometimes we need to calculate a new variable from other variables in our data frame. We want to know if the proportion of tropical species differs among sites and across years.
+Sometimes we need to calculate a new variable from other variables in our dataframe. We want to know if the proportion of tropical species differs among sites and across years.
 
 It sounds pretty straight-forward, but actually requires a few new data wrangling skills. We'll introduce a new package to help us, 'tidyr'. 
+
+```{r}
+library(tidyr)
+```
 
 First, we need to pivot our data from long format to wide format. Typically, dplyr and ggplot work best with long format, i.e. each observation has its own row, and each column is a variable. This is how our RLS data is formatted. 
 
 Wide format means that columns can refer to different types of observations. In this case, we want to make make observations of Temperate and Tropical fish species abundances their own columns. This will make it easier to calculate the proportion of tropical species in each site and survey.
 
-Of course there are packages that make converting long to wide format, so store the data in the way that makes most sense. e.g. there are times where wide format may be more efficient to store in a computer's memory, or wide format is preferable for error checking. e.g. if a human is entering data from documents, it is sometimes helpful to have all variables as separate columns so the human can move along columns entering data under each column and not forget to do any. Later on we'd transform this to long format for ggplot. 
+Since there are packages that make converting long to wide format easy, it's best to store the data in the way that makes most sense. e.g. there are times where wide format may be more efficient to store in a computer's memory, or wide format is preferable for error checking. e.g. if a human is entering data from documents, it is sometimes helpful to have all variables as separate columns so the human can move along columns entering data under each column and not forget to do any. Later on we'd transform this to long format for ggplot. 
 
 The tidy R package helps us with these conversions. This time we'll pivot wider: 
 
@@ -473,7 +478,7 @@ ggplot(dat5) +
 
 So we see the increase in proportion tropical after the heatwave, then it comes back down. 
 
-Note that we put the colour aesthetic inside the `geom_point()` call. Why did we do this? If its not clear why, try moving the colour aesthetic into the first `aes()` call. What happens then? 
+Note that we put the colour aesthetic inside the `geom_point()` call. Why did we do this? If it's not clear why, try moving the colour aesthetic into the first `aes()` call. What happens then? 
 
 ## Conclusion
 
@@ -481,15 +486,15 @@ So we hope this very brief introduction to data wrangling has inspired you to le
 
 ### Getting help 
 
-Error messages can happen frequently in R, especially when you're trying a new techniques/analyses, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable` mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
+Error messages can happen frequently in R, especially when you're trying a new technique/analysis, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable` mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
 
-Always remember that breaking code isn't going to break any bones. So try, try again. If it is a long piece of code, try breaking it down and running each part to see what happens. Or try the same thing in different ways. Afterall, making mistakes is how we learn. 
+Always remember that breaking code isn't going to break any bones. So try, try again. If it is a long piece of code, try breaking it down and running each part to see what happens. Or try the same thing in different ways. After all, making mistakes is how we learn. 
 
-However, in the meantime, if you can't solve an error message, web searches are the first way to go. Try copying and pasting the error message into a search engine, along with 'R' and the name of the function you're trying to use. If other people have encountered similar error messages, you will likely be directed to a stack-exchange forum with potential solutions to the problem. 
+If you can't solve an error message, web searches are the first way to go. Try copying and pasting the error message into a search engine, along with 'R' and the name of the function you're trying to use. If other people have encountered similar error messages, you will likely be directed to a stack-exchange forum with potential solutions to the problem. 
 
 Many groups, like Rstudio, also provide 'cheatsheets' which can be highly valuable when starting out with some of the packages we have introduced today. [Here are some](https://rstudio.com/resources/cheatsheets/).
 
-Also, if you use twitter, following #rstats is a nice way to keep up-to-date with the latest developments in R. You can also tweet your own questions/errors with the #rstats (or #rspatial) to get help.
+Also, if you use twitter, following #rstats is a nice way to keep up-to-date with the latest developments in R. You can also tweet your own questions/errors with #rstats (or #rspatial) to get help.
 
 All the tools and more from what we covered today is in greater detail in the free online book [R for Data Science](https://r4ds.had.co.nz/). 
 
@@ -511,7 +516,7 @@ If you are going to use R alot, don't shy away from the base code too. Its base 
 
 Pipes are a tool that allow us to elegantly code data wrangling steps into a series of sequential actions on a single data frame. When used properly, pipes allow us to implement the same wrangling steps with less code.
 
-In this course we've used how to use quite a few dplyr functions for data wrangling, including: 'filter', 'group_by', 'summarise', and 'mutate'. So far we've coded each of those functions as separate steps. Let's look at how pipes can be used to code all of those sequentially in a single line of code.
+In this course we've learned how to use quite a few dplyr functions for data wrangling, including: 'filter', 'group_by', 'summarize', and 'mutate'. So far we've coded each of those functions as separate steps. Let's look at how pipes can be used to code all of those sequentially in a single line of code.
 
 We want to know the total abundance of fish species greater than 12 cm at each of our sites in the year 2011.
 
