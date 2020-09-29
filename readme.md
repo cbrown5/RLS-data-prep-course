@@ -4,7 +4,9 @@ Chris Brown, Christina Buelow
 
 28th July 2020
 
-Welcome to our "Cleaning ecological survey data for conservation scientists" R course site. Below are instructions for getting setup or jump straight to the
+Welcome to our "Cleaning ecological survey data for conservation scientists" R course site. Below are instructions for getting setup or jump straight to the notes and data.
+
+[Check out the conservation hackers site for upcoming online courses](https://www.conservationhackers.org/courses)
 
 ### [Course notes](http://www.seascapemodels.org/RLS-data-prep-course/2020-07-29-ConservationHackers-data-wrangling-course.html)
 
