@@ -334,7 +334,6 @@ It matches!
 
 And site data: 
 
-
 ```{r}
 sdat <- read_csv("data-raw/Rottnest-Island-sites.csv")
 length(unique(sdat$SiteCode))
@@ -349,7 +348,6 @@ Finally, let's just add years again:
 ```{r}
 dat3$year <- year(dat3$SurveyDate)
 ```
-
 
 ## Summarizing by groups
 
@@ -438,7 +436,7 @@ library(patchwork)
 
 We'll combine our histogram of total abundance and the plot of total abundance over time into one. We'll also add plot labels and a theme to get our plots closer to publication quality. (Note that there is an excellent package called 'cowplot' that was created by data visualisation expert Claus O. Wilke. This package offers publication-ready themes that can be tacked on to your ggplots, creating publication quality figures in a flash.)
 
-To use patchwork to combine our disparate plots, first we'll store our histogram and time-series plots as objects in R. We'll call them 'a' and 'b'. While we do that, since we're interested in creating publication quality figures, we'll make the x an y-axis labels more meaningful and add ggplot's 'theme_classic' to get the plots looking sleek. 
+To use patchwork to combine our disparate plots, first we'll store our histogram and time-series plots as objects in R. We'll call them 'a' and 'b'. While we do that, since we're interested in creating publication quality figures, we'll make the x and y-axis labels more meaningful and add ggplot's 'theme_classic' to get the plots looking sleek. 
 
 ```{r}
 a <- ggplot(datA) + 
@@ -456,7 +454,6 @@ b <- ggplot(dat4) +
   xlab('Year') +
   theme_classic() +
   theme(legend.title = element_blank())
-  
 ```
 
 Now that these two plots are stored in R's global environment, we can use patchwork to combine them into a single multipanel plot. We'll call this 'c'.
@@ -465,7 +462,7 @@ Now that these two plots are stored in R's global environment, we can use patchw
 c <- a + b
 ```
 
-Easy, wasn't it? If we'd rather have the two plots stacked on top of each other, we can do this instead.
+Nice! If we'd rather have the two plots stacked on top of each other, we can do this instead.
 
 ```{r}
 c <- a/b
