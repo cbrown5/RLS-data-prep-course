@@ -537,7 +537,7 @@ So we hope this very brief introduction to data wrangling has inspired you to le
 
 ### Getting help 
 
-Error messages can happen frequently in R, especially when you're trying a new technique/analysis, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable` mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
+Error messages can happen frequently in R, especially when you're trying a new technique/analysis, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable' mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
 
 Always remember that breaking code isn't going to break any bones. So try, try again. If it is a long piece of code, try breaking it down and running each part to see what happens. Or try the same thing in different ways. After all, making mistakes is how we learn. 
 
