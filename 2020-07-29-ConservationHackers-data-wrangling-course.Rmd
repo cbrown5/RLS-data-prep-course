@@ -430,9 +430,9 @@ The key to the facet working well was that the temp-trop label was a column of i
 
 ## Combining disparate plots
 
-Sometimes you will want to combine separate plots into one, perhaps for a publication. Our favorite package for doing this is called 'patchwork'. The syntax of patchwork is easy and fun to use, let's try it out.
+Sometimes you will want to combine separate plots into one, perhaps for a publication. Our favorite packages for doing this is called 'patchwork'. The syntax of patchwork is easy and fun to use, let's try it out.
 
-We'll combine our histogram of total abundance and the plot of total abundance over time into one. We'll also add plot labels and a theme to get our plots closer to publication quality. (Note that there is an excellent package called 'cowplot' that was created by data visualisation expert Claus O. Wilke. This package offers publication-ready themes that can be added on to your ggplots; publication quality in a flash.)
+We'll combine our histogram of total abundance and the plot of total abundance over time into one. We'll also add plot labels and a theme to get our plots closer to publication quality. (Note that there is an excellent package called 'cowplot' that was created by data visualisation expert Claus O. Wilke. This package offers publication-ready themes that can be tacked on to your ggplots, creating publication quality figures in a flash.)
 
 To use patchwork to combine our disparate plots, first we'll store our histogram and time-series plots as objects in R. We'll call them 'a' and 'b'.
 
@@ -447,6 +447,18 @@ b <- ggplot(dat4) +
   stat_smooth()
 ```
 Now that these two plots are stored in R's global environment, we can use patchwork to combine them into a single multipanel plot. We'll call this 'c'.
+
+```{r}
+c <- a + b
+```
+
+Easy, wasn't it? If we'd rather have the two plots stacked on top of each other, we can do this instead.
+
+```{r}
+c <- a/b
+```
+
+Now lets add some plot labels and ggplot's 'theme_classic' to get the plots looking sleek. We'll use the function 'ggsave' to export the plot to the folder on your computer that is home to your R script.
 
 
 ## Creating new variables
