@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 The most time-consuming step in many analyses is the cleaning and preparation of the data. This course will show you how you can use R to speed up that process and make it more transparent and repeatable. This means it will also be easier to check for and correct errors in your data processing. 
 
-This course is part of a new initiative Conservation Hackers (webpage forthcoming!). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
+This course is part of a new initiative [Conservation Hackers](https://www.conservationhackers.org/). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
 
 We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
 
@@ -33,7 +33,7 @@ Please have R and Rstudio installed on your computer before starting. You'll wan
 The latest version of R is version 4. You are welcome to try this version. We are using 3.6.2 currently for writing this course, so there may be some minor differences. The reason we haven't updated yet is that a lot of the packages we use haven't been updated yet. 
 
 You'll also need to install a few R packages. We're using `dplyr`, `readr`, `lubridate`, `ggplot2` and `tidyr` in this course. You can install them with this R code: 
-`install.packages(c("dplyr", "readr", "lubridate", "ggplot2"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
+`install.packages(c("dplyr", "readr", "lubridate", "ggplot2", "tidyr"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
 
 If that doesn't work email us with the error and we'll try to help. Otherwise, see your IT department for help. 
 We're using dplyr version 1.0, which was released earlier this year. If you have an older version of dplyr the course should still work fine, but there may be some minor differences in the code. 
@@ -89,7 +89,7 @@ Leave yourself some 'breadcrumbs' at the top of the script. It's common that you
 ```{r}
 # RLS data wrangling course
 # CJ Brown 
-#2020-07-23
+# 2020-07-23
 ```
 
 The `#` symbol is a 'comment' that tells R to ignore this text. 
@@ -116,7 +116,7 @@ dat <- read_csv("data-raw/Rottnest-Island-UVC.csv")
 
 There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
 
-We've read in our data as a data frame; check your global environment and you should see is listed as an object in memory called 'dat' with the number of observations and variables listed.
+We've read in our data as a data frame; check your global environment and you should see it is listed as an object in memory called 'dat' with the number of observations and variables listed.
 
 ## Check the data
 
@@ -304,7 +304,7 @@ length(unique(dat2$SurveyID))
 length(unique(survdat$SurveyID))
 ```
 
-So it looks like this time our join duplicated some data, but there are duplicate survey IDs in survday! Always good to check the data you are joining to for duplicates before proceeding. Let's ID the duplicates so we can see them: 
+So it looks like this time our join duplicated some data, but there are duplicate survey IDs in survdat! Always good to check the data you are joining to for duplicates before proceeding. Let's ID the duplicates so we can see them: 
 
 ```{r}
 dups <- which(duplicated(survdat$SurveyID))
