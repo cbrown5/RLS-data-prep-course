@@ -1,7 +1,7 @@
 ---
 title: "Cleaning ecological survey data for conservation scientists"
 author: "CJ Brown, C Buelow"
-date: "29 July 2020"
+date: "20 October 2020"
 output: html_document
 ---
 
@@ -32,8 +32,8 @@ This is an intermediate level course, so we'll assume you know how to install R 
 Please have R and Rstudio installed on your computer before starting. You'll want to save plenty of time for doing this, it can be tricky on some computers, especially if you do not have 'admin' permission on a work computer. You may need to call IT to get help. We obviously only offer limited help with such installation issues. 
 The latest version of R is version 4. You are welcome to try this version. We are using 3.6.2 currently for writing this course, so there may be some minor differences. The reason we haven't updated yet is that a lot of the packages we use haven't been updated yet. 
 
-You'll also need to install a few R packages. We're using `dplyr`, `readr`, `lubridate`, `ggplot2` and `tidyr` in this course. You can install them with this R code: 
-`install.packages(c("dplyr", "readr", "lubridate", "ggplot2", "tidyr"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
+You'll also need to install a few R packages. We're using `dplyr`, `readr`, `lubridate`, `ggplot2`, `tidyr`, and `patchwork` in this course. You can install them with this R code: 
+`install.packages(c("dplyr", "readr", "lubridate", "ggplot2", "tidyr", "patchwork"))`. To install the first five packages in one go (plus more handy data wrangling packages we won't cover here) use `install.packages(c("tidyverse"))`.
 
 If that doesn't work email us with the error and we'll try to help. Otherwise, see your IT department for help. 
 We're using dplyr version 1.0, which was released earlier this year. If you have an older version of dplyr the course should still work fine, but there may be some minor differences in the code. 
