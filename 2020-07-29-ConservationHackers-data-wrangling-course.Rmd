@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 The most time-consuming step in many analyses is the cleaning and preparation of the data. This course will show you how you can use R to speed up that process and make it more transparent and repeatable. This means it will also be easier to check for and correct errors in your data processing. 
 
-This course is part of a new initiative Conservation Hackers (webpage forthcoming!). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
+This course is part of a new initiative [Conservation Hackers](https://www.conservationhackers.org/). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
 
 We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
 
@@ -33,7 +33,7 @@ Please have R and Rstudio installed on your computer before starting. You'll wan
 The latest version of R is version 4. You are welcome to try this version. We are using 3.6.2 currently for writing this course, so there may be some minor differences. The reason we haven't updated yet is that a lot of the packages we use haven't been updated yet. 
 
 You'll also need to install a few R packages. We're using `dplyr`, `readr`, `lubridate`, `ggplot2` and `tidyr` in this course. You can install them with this R code: 
-`install.packages(c("dplyr", "readr", "lubridate", "ggplot2"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
+`install.packages(c("dplyr", "readr", "lubridate", "ggplot2", "tidyr"))` or just `install.packages(c("tidyverse"))`, which installs these packages and more. 
 
 If that doesn't work email us with the error and we'll try to help. Otherwise, see your IT department for help. 
 We're using dplyr version 1.0, which was released earlier this year. If you have an older version of dplyr the course should still work fine, but there may be some minor differences in the code. 
@@ -89,7 +89,7 @@ Leave yourself some 'breadcrumbs' at the top of the script. It's common that you
 ```{r}
 # RLS data wrangling course
 # CJ Brown 
-#2020-07-23
+# 2020-07-23
 ```
 
 The `#` symbol is a 'comment' that tells R to ignore this text. 
@@ -116,7 +116,7 @@ dat <- read_csv("data-raw/Rottnest-Island-UVC.csv")
 
 There is also the similar `read.csv()` in base R. We like to use readr's `read_csv` because it does some extra checks on the data, converts data to sensible classes where it can (e.g. dates), and allows for more flexibility in naming variables (columns). 
 
-We've read in our data as a data frame; check your global environment and you should see is listed as an object in memory called 'dat' with the number of observations and variables listed.
+We've read in our data as a data frame; check your global environment and you should see it is listed as an object in memory called 'dat' with the number of observations and variables listed.
 
 ## Check the data
 
@@ -304,7 +304,7 @@ length(unique(dat2$SurveyID))
 length(unique(survdat$SurveyID))
 ```
 
-So it looks like this time our join duplicated some data, but there are duplicate survey IDs in survday! Always good to check the data you are joining to for duplicates before proceeding. Let's ID the duplicates so we can see them: 
+So it looks like this time our join duplicated some data, but there are duplicate survey IDs in survdat! Always good to check the data you are joining to for duplicates before proceeding. Let's ID the duplicates so we can see them: 
 
 ```{r}
 dups <- which(duplicated(survdat$SurveyID))
@@ -334,7 +334,6 @@ It matches!
 
 And site data: 
 
-
 ```{r}
 sdat <- read_csv("data-raw/Rottnest-Island-sites.csv")
 length(unique(sdat$SiteCode))
@@ -349,7 +348,6 @@ Finally, let's just add years again:
 ```{r}
 dat3$year <- year(dat3$SurveyDate)
 ```
-
 
 ## Summarizing by groups
 
@@ -428,6 +426,55 @@ Spot the difference.
 
 The key to the facet working well was that the temp-trop label was a column of its own and all the abundances were in one long column. If there was one column each for temp and trop abundance, then facet wouldn't work. Our dataframe is what is called 'long format data'. ggplot likes long format data, it doesn't like 'wide format data'. This is important to keep in mind when you are preparing data for use in ggplot. 
 
+## Combining disparate plots for publication
+
+Sometimes you will want to combine separate plots into one, perhaps for a publication. Our favorite packages for doing this is called 'patchwork'. The syntax of patchwork is easy and fun to use, let's try it out.
+
+```{r}
+library(patchwork)
+```
+
+We'll combine our histogram of total abundance and the plot of total abundance over time into one. We'll also add plot labels and a theme to get our plots closer to publication quality. (Note that there is an excellent package called 'cowplot' that was created by data visualisation expert Claus O. Wilke. This package offers publication-ready themes that can be tacked on to your ggplots, creating publication quality figures in a flash.)
+
+To use patchwork to combine our disparate plots, first we'll store our histogram and time-series plots as objects in R. We'll call them 'a' and 'b'. While we do that, since we're interested in creating publication quality figures, we'll make the x and y-axis labels more meaningful and add ggplot's 'theme_classic' to get the plots looking sleek. 
+
+```{r}
+a <- ggplot(datA) + 
+  aes(x = sum_abund, color = NULL) +
+  geom_histogram() +
+  ylab('Frequency') +
+  xlab('Abundance') +
+  theme_classic()
+  
+b <- ggplot(dat4) + 
+  aes(x = year, y = sum_abund, color = TempTrop_23cutoff) +
+  geom_point() +
+  stat_smooth() +
+  ylab('Abundance') +
+  xlab('Year') +
+  theme_classic() +
+  theme(legend.title = element_blank())
+```
+
+Now that these two plots are stored in R's global environment, we can use patchwork to combine them into a single multipanel plot. We'll call this 'c'.
+
+```{r}
+c <- a + b
+```
+
+Nice! If we'd rather have the two plots stacked on top of each other, we can do this instead.
+
+```{r}
+c <- a/b
+```
+
+Now lets add some plot labels and use the function 'ggsave' to export the plot to the folder on your computer that is home to your R script.
+
+```{r}
+c + plot_annotation(tag_levels = 'A')
+ggsave('fig-1.png')
+```
+
 ## Creating new variables
 
 Sometimes we need to calculate a new variable from other variables in our dataframe. We want to know if the proportion of tropical species differs among sites and across years.
@@ -490,7 +537,7 @@ So we hope this very brief introduction to data wrangling has inspired you to le
 
 ### Getting help 
 
-Error messages can happen frequently in R, especially when you're trying a new technique/analysis, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable` mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
+Error messages can happen frequently in R, especially when you're trying a new technique/analysis, and can be frustrating. And frustration can [demotivate us](http://www.seascapemodels.org/rstats/2017/09/18/emotions-of-programming-rstats.html). First, read the error message and try to find meaning in it. This can be difficult and seem somewhat futile if you're new to R programming (what does 'object of type closure is not subsettable' mean to a human?) but, over time, your effort in trying to decipher error messages will pay-off. The better you are at understanding error messages, the better you will become better at de-bugging your own code.
 
 Always remember that breaking code isn't going to break any bones. So try, try again. If it is a long piece of code, try breaking it down and running each part to see what happens. Or try the same thing in different ways. After all, making mistakes is how we learn. 
 
