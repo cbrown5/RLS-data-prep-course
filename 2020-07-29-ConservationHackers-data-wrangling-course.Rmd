@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 The most time-consuming step in many analyses is the cleaning and preparation of the data. This course will show you how you can use R to speed up that process and make it more transparent and repeatable. This means it will also be easier to check for and correct errors in your data processing. 
 
-This course is part of a new initiative [Conservation Hackers](https://www.conservationhackers.org/). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
+This course is part of a new initiative called [Conservation Hackers](https://www.conservationhackers.org/). Conservation hackers aims to connect conservation practitioners who need help with programming, data and data analysis with data scientists. Conservation hackers also aims to educate conservation scientists in programming skills. 
 
 We're pleased to be partnering with [Reef Life Survey](https://reeflifesurvey.com/) to offer this course. Reef Life Survey is a not-for-profit organisation that trains volunteer citizen scientist divers in monitoring reef life. The Reef Life Survey data is freely available from their webpage and we'll be using it as an example of conservation monitoring data in this course. 
 
