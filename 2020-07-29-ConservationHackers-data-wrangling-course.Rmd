@@ -460,12 +460,14 @@ Now that these two plots are stored in R's global environment, we can use patchw
 
 ```{r}
 c <- a + b
+c
 ```
 
 Nice! If we'd rather have the two plots stacked on top of each other, we can do this instead.
 
 ```{r}
 c <- a/b
+c
 ```
 
 Now lets add some plot labels and use the function 'ggsave' to export the plot to the folder on your computer that is home to your R script.
