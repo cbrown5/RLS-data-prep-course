@@ -1,6 +1,6 @@
 # R course: Cleaning ecological survey data for conservation scientists
 
-Chris Brown, Christina Buelow
+[Chris Brown](https://experts.griffith.edu.au/7867-chris-brown), [Christina Buelow](https://experts.griffith.edu.au/24225-christina-buelow)
 
 Welcome to our "Cleaning ecological survey data for conservation scientists" R course site. Below are instructions for getting setup or jump straight to the notes and data.
 
